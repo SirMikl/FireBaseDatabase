@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView recview;
+    MyAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,5 +22,19 @@ public class MainActivity extends AppCompatActivity {
         FirebaseRecyclerOptions<Model> options = new  FirebaseRecyclerOptions.Builder<Model>()
                 .setQuery(FirebaseDatabase.getInstance().getReference().child("Information"), Model.class)
                 .build();
+        adapter = new MyAdapter(options);
+        recview.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }
